@@ -1,0 +1,154 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Calculator</title>
+</head>
+
+<body style="line-height:1.5">
+    <center>
+        <h1><b> Network Calculator</b></h1>
+        <h2>pentru adrese IPv4</h2>
+    </center>
+
+    <center>
+        <div>
+            Introduceti adresa IP:
+            <input id="inp1" type="number" max="255" min="0" oninput="octet1()" maxlenght="3" placeholder="192">
+            <input id="inp2" type="number" max="255" min="0" oninput="octet2()" maxlenght="3" placeholder="168">
+            <input id="inp3" type="number" max="255" min="0" oninput="octet3()" maxlenght="3" placeholder="1">
+            <input id="inp4" type="number" max="255" min="0" oninput="octet4()" maxlenght="3" placeholder="1">
+
+        </div>
+        <div>
+            Introduceti masca de subretea:
+            <input id="sm1" type="number" value="255" max="255" min="0" oninput="sub_m1()" placeholder="255">
+            <input id="sm2" type="number" value="255" max="255" min="0" oninput="sub_m2()" placeholder="255">
+            <input id="sm3" type="number" value="255" max="255" min="0" oninput="sub_m3()" placeholder="255">
+            <input id="sm4" type="number" value="0" max="255" min="0" oninput="sub_m4()" placeholder="0">
+            <input id="VSM" type="string" script="validate_SM;" value="Valid" readonly="readonly"
+                style="background-color: greenyellow; width:100; text-align:center;">
+            <label for="CIDR">CIDR</label>
+            <select id="CIDR" onchange="changeSM()">
+                <option value="32">\32</option>
+                <option value="31">\31</option>
+                <option value="30">\30</option>
+                <option value="29">\29</option>
+                <option value="28">\28</option>
+                <option value="27">\27</option>
+                <option value="26">\26</option>
+                <option value="25">\25</option>
+                <option value="24" selected="selected">\24</option>
+                <option value="23">\23</option>
+                <option value="22">\22</option>
+                <option value="21">\21</option>
+                <option value="20">\20</option>
+                <option value="19">\19</option>
+                <option value="18">\18</option>
+                <option value="17">\17</option>
+                <option value="16">\16</option>
+                <option value="15">\15</option>
+                <option value="14">\14</option>
+                <option value="13">\13</option>
+                <option value="12">\12</option>
+                <option value="11">\11</option>
+                <option value="10">\10</option>
+                <option value="9">\9</option>
+                <option value="8">\8</option>
+                <option value="7">\7</option>
+                <option value="6">\6</option>
+                <option value="5">\5</option>
+                <option value="4">\4</option>
+                <option value="3">\3</option>
+                <option value="2">\2</option>
+                <option value="1">\1</option>
+            </select>
+        </div>
+    </center>
+    <br>
+    </center>
+    <center>
+        <table>
+            <tr>
+                <th><label for="oup">Adresa IP:</label></th>
+                <td><input id="oup" type="string" script="formIPAdress();" placeholder="192.168.1.1" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="MS">Masca de subreata</label></th>
+                <td><input id="MS" type="string" script="formIPAdress();" placeholder="255.255.255.0"
+                        readonly="readonly" style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="bin">Valoare binara adresa IP </label></th>
+                <td><input id="bin" type="string" script="formIPAdress();"
+                        placeholder="11000000.10101000.00000001.00000001" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="bin_ms">Valoare binara masca de subretea </label></th>
+                <td><input id="bin_ms" type="string" script="formIPAdress();"
+                        placeholder="11111111.11111111.11111111.00000000" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="CAIP">Clasa adresa IP </label></th>
+                <td><input id="CAIP" type="string" script="formIPAdress();" placeholder="C" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="tAd">Tip adresa IP </label></th>
+                <td><input id="tAd" type="string" script="formIPAdress();" placeholder="IP privat" readonly="readonly"
+                        style="width:270; text-align:center;" placeholder="IP privat"></td>
+            </tr>
+            <tr>
+                <th><label for="Adr_nw">Adresa retelei </label></th>
+                <td><input id="Adr_nw" type="string" script="formIPAdress();" placeholder="192.168.1.0"
+                        readonly="readonly" style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="Adr_br">Adresa de broadcast </label></th>
+                <td><input id="Adr_br" type="string" script="formIPAdress();" placeholder="192.168.1.255"
+                        readonly="readonly" style="width:270; text-align:center;"></td>
+            </tr>
+            <!-- TODO eroare la \31 \32 si la \30 de verificat subnet calculator -->
+            <tr>
+                <th><label for="Adr_pga">Adresa primei gazde din retea </label></th>
+                <td><input id="Adr_pga" type="string" script="formIPAdress();" placeholder="192.168.1.1"
+                        readonly="readonly" style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="Adr_uga">Adresa ultimei gazde din retea </label></th>
+                <td><input id="Adr_uga" type="string" script="formIPAdress();" placeholder="192.168.1.254"
+                        readonly="readonly" style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="MsI">Masca de subretea implicita </label></th>
+                <td><input id="MsI" type="string" script="formIPAdress();" placeholder="255.255.255.0"
+                        readonly="readonly" style="width:270; text-align:center;"></td>
+            </tr>
+            
+            <!-- no bueno nu se actualizeaza -->
+            <tr>
+                <th><label for="Mw">Masca wildcard </label></th>
+                <td><input id="Mw" type="string" script="formIPAdress();" placeholder="0.0.0.255" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="Nrt_a">Numar total de adrese </label></th>
+                <td><input id="Nrt_a" type="string" script="formIPAdress();" placeholder="256" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="Nrt_ga">Numar total de gazde </label></th>
+                <td><input id="Nrt_ga" type="string" script="formIPAdress();" placeholder="254" readonly="readonly"
+                        style="width:270; text-align:center;"></td>
+            </tr>
+        </table>
+    </center>
+    <script src="js/app1.js"></script>
+</body>
+
+</html>
