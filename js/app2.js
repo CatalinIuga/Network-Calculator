@@ -7,7 +7,7 @@ var full_adress; // toata adresa ip
 var first_adress = "", last_adress = "";
 
 function main() {
-    maxLengthCheck(prefix);
+    maxLengthCheck2(prefix);
     prefi = document.getElementById("prefix").value;
     if (validare_ipv6()) {
         process_adress();
@@ -82,7 +82,7 @@ function process_adress() {
     document.getElementById("lAdr").value = last_adress;
 }
 
-function maxLengthCheck(object) {
+function maxLengthCheck2(object) {
     if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, 3)
     if (object.value > 127)
