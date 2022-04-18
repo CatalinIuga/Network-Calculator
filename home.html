@@ -7,7 +7,7 @@
     <title>Network Calculator</title>
 </head>
 
-<body style="line-height:1.5">
+<body style="line-height:2; font-family: monospace;">
     <center>
         <h1><b> Network Calculator</b></h1>
         <h2>pentru adrese IPv4</h2>
@@ -15,7 +15,7 @@
 
     <center>
         <div>
-            Introduceti adresa IP:
+            Introduceti adresa IPv4:
             <input id="inp1" type="number" max="255" min="0" oninput="octet1()" maxlenght="3" placeholder="192">
             <input id="inp2" type="number" max="255" min="0" oninput="octet2()" maxlenght="3" placeholder="168">
             <input id="inp3" type="number" max="255" min="0" oninput="octet3()" maxlenght="3" placeholder="1">
@@ -29,7 +29,7 @@
             <input id="sm3" type="number" value="255" max="255" min="0" oninput="sub_m3()" placeholder="255">
             <input id="sm4" type="number" value="0" max="255" min="0" oninput="sub_m4()" placeholder="0">
             <input id="VSM" type="string" script="validate_SM;" value="Valid" readonly="readonly"
-                style="background-color: greenyellow; width:100; text-align:center;">
+                style="background-color: lime; width:100; text-align:center;">
             <label for="CIDR">CIDR</label>
             <select id="CIDR" onchange="changeSM()">
                 <option value="32">\32</option>
@@ -129,8 +129,6 @@
                 <td><input id="MsI" type="string" script="formIPAdress();" placeholder="255.255.255.0"
                         readonly="readonly" style="width:270; text-align:center;"></td>
             </tr>
-            
-            <!-- no bueno nu se actualizeaza -->
             <tr>
                 <th><label for="Mw">Masca wildcard </label></th>
                 <td><input id="Mw" type="string" script="formIPAdress();" placeholder="0.0.0.255" readonly="readonly"
@@ -148,7 +146,37 @@
             </tr>
         </table>
     </center>
+    <br>
+    <center>
+        <h2>pentru adrese IPv6</h2>
+    </center>
+
+    <center>
+        <div>
+            Introduceti adresa IPv6 si prefixul dorit:
+            <input id="ipv6_inp" type="text" oninput="main()" style="width: 275;" maxlenght="39"
+                placeholder="2001:0db8:85a3:0000:0000:8a2e:0370:7334">
+            \<input id="prefix" type="number" max="128" min="0" oninput="main()" maxlenght="3" placeholder="64">
+            <input id="valid_ipv6" script="validare_ipv6" type="string" value="Valid" readonly="readonly"
+                style="background-color: lime; width:100; text-align:center;">
+        </div>
+
+        <table>
+            <tr>
+                <th><label for="fAdr">Prima adresa</label></th>
+                <td><input id="fAdr" type="string" script="main();" placeholder="2001:0db8:85a3:0000:0000:0000:0000:0000" readonly="readonly"
+                        style="width:275; text-align:center;"></td>
+            </tr>
+            <tr>
+                <th><label for="lAdr">Ultima adresa</label></th>
+                <td><input id="lAdr" type="string" script="main();" placeholder="2001:0db8:85a3:0000:ffff:ffff:ffff:ffff" readonly="readonly"
+                        style="width:275; text-align:center;"></td>
+            </tr>
+        </table>
+    </center>
+
     <script src="js/app1.js"></script>
+    <script src="js/app2.js"></script>
 </body>
 
 </html>

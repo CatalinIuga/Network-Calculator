@@ -1,4 +1,5 @@
 var ip;
+var CIDR_val;
 
 // octeti input adresa IP
 var oct1 = 192,
@@ -73,10 +74,12 @@ function changeSM() {
         case 31: smo1 = 255; smo2 = 255; smo3 = 255; smo4 = 254; break;
         case 32: smo1 = 255; smo2 = 255; smo3 = 255; smo4 = 255; break;
     }
+    CIDR_val = val;
     subnetmaskDone(); // apel output subnetmask
     subnetmask_HTML(); // schimb input subnetmask
     nr_adrese(); // calculul de aderse
     document.getElementById("CIDR").value = val;
+    formIPAddress();
 }
 
 // schimba valoarea de input subnetmask
@@ -108,7 +111,7 @@ function subnet_to_CIDR(smo1, smo2, smo3, smo4) {
 
 // actualizare optiune selectata in functie de subnetmask-ul introdus
 function act_CIDR() {
-    document.getElementById("CIDR").value = subnet_to_CIDR(smo1,smo2,smo3,smo4);
+    document.getElementById("CIDR").value = subnet_to_CIDR(smo1, smo2, smo3, smo4);
 }
 
 // functia principala, formeaza adresa IP
@@ -118,16 +121,15 @@ function formIPAddress() {
     ip = ip.concat(oct1, ".", oct2, ".", oct3, ".", oct4);
     document.getElementById("oup").value = ip; // afisare adresa ip introdusa
     ip_to_binary();
-    subnetmaskDone(); 
+    subnetmaskDone();
     validate_SM();
     classFind();
     findNetAdress();
-    findWildmask();
     implictit_SM();
 }
 
 // calculeaza valoarea binara a adresei ip introduse
-function ip_to_binary(){
+function ip_to_binary() {
     let binoct1 = binary(oct1);
     let binoct2 = binary(oct2);
     let binoct3 = binary(oct3);
@@ -150,16 +152,16 @@ function findBroadmask() {
 }
 
 // calculeaza numarul total de adrese cu ajutorul notatiei CIDR
-function nr_adrese(){
-    let nr = 2**(32-subnet_to_CIDR(smo1,smo2,smo3,smo4));
+function nr_adrese() {
+    let nr = 2 ** (32 - subnet_to_CIDR(smo1, smo2, smo3, smo4));
     document.getElementById("Nrt_a").value = nr;
     nr_gazde(nr);
 }
 
 // calculeaza nr total de gazde cu ajutorul numarului total de adrese
-function nr_gazde(nr){  
-    let n = nr-2;
-    if(n<0)
+function nr_gazde(nr) {
+    let n = nr - 2;
+    if (n < 0)
         n = 0;
     document.getElementById("Nrt_ga").value = n;
 }
@@ -176,6 +178,7 @@ function subnetmaskDone() {
     let sm_bin = "";
     sm_bin = sm_bin.concat(binsm1, ".", binsm2, ".", binsm3, ".", binsm4);
     document.getElementById("bin_ms").value = sm_bin;
+    findWildmask();
 }
 
 // calculeaza masca de subretea implicita in functie de clasa adresei IP
@@ -207,6 +210,9 @@ function findWildmask() {
 
 // calculeaza prima adresa din retea
 function findFirstAdress() {
+    if(CIDR_val ==32 || CIDR_val==31)
+        document.getElementById("Adr_pga").value = "N/A";
+    else{
     var fad1 = na1;
     var fad2 = na2;
     var fad3 = na3;
@@ -214,17 +220,22 @@ function findFirstAdress() {
     Fadress = "";
     Fadress = Fadress.concat(fad1, ".", fad2, ".", fad3, ".", fad4);
     document.getElementById("Adr_pga").value = Fadress;
+    }
 }
 
 // calculeaza ultima adresa din retea
 function findLastAdress() {
-    var Lad1 = bad1;
-    var Lad2 = bad2;
-    var Lad3 = bad3;
-    var Lad4 = Number(bad4) - 1;
-    Ladress = "";
-    Ladress = Ladress.concat(Lad1, ".", Lad2, ".", Lad3, ".", Lad4);
-    document.getElementById("Adr_uga").value = Ladress;
+    if (CIDR_val == 32 || CIDR_val == 31)
+        document.getElementById("Adr_uga").value = "N/A";
+    else {
+        var Lad1 = bad1;
+        var Lad2 = bad2;
+        var Lad3 = bad3;
+        var Lad4 = Number(bad4) - 1;
+        Ladress = "";
+        Ladress = Ladress.concat(Lad1, ".", Lad2, ".", Lad3, ".", Lad4);
+        document.getElementById("Adr_uga").value = Ladress;
+    }
 }
 
 // calculeaza adresa retelei
@@ -309,7 +320,7 @@ function sub_m4() {
     formIPAddress();
 }
 
-// 
+// asigura ca lungimea octetiilor nu este mai mare de 3 cifre si ca se afla in [0:255]
 function maxLengthCheck(object) {
     if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, 3)
@@ -327,7 +338,7 @@ function validate_SM() {
     var res = smrgex.test(s);
     if (res) {
         document.getElementById("VSM").innerHTML = "Valid";
-        document.getElementById("VSM").style.backgroundColor = "greenyellow";
+        document.getElementById("VSM").style.backgroundColor = "lime";
         act_CIDR();
     }
     else {
@@ -351,6 +362,7 @@ function padLeft(x) {
     return x;
 }
 
+// stabileste clasa adresei IP
 function classFind() {
     if (oct1 >= 0 && oct1 <= 127) {
         document.getElementById("CAIP").value = "A";
@@ -371,20 +383,4 @@ function classFind() {
     else if (oct1 == 192 && oct2 == 168)
         document.getElementById("tAd").value = "IP privat";
     else document.getElementById("tAd").value = "IP public";
-}
-
-
-// Pentru IPV6 
-let ipv6_regex = /^(?:(?:[a-fA-F\d]{1,4}:){7}(?:[a-fA-F\d]{1,4}|:)|(?:[a-fA-F\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|:[a-fA-F\d]{1,4}|:)|(?:[a-fA-F\d]{1,4}:){5}(?::(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,2}|:)|(?:[a-fA-F\d]{1,4}:){4}(?:(?::[a-fA-F\d]{1,4}){0,1}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,3}|:)|(?:[a-fA-F\d]{1,4}:){3}(?:(?::[a-fA-F\d]{1,4}){0,2}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,4}|:)|(?:[a-fA-F\d]{1,4}:){2}(?:(?::[a-fA-F\d]{1,4}){0,3}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,5}|:)|(?:[a-fA-F\d]{1,4}:){1}(?:(?::[a-fA-F\d]{1,4}){0,4}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,6}|:)|(?::(?:(?::[a-fA-F\d]{1,4}){0,5}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,7}|:)))(?:%[0-9a-zA-Z]{1,})?$/gm;
-
-function hex_to_binary(){
-    
-}
-
-function binary_to_hex(){
-    var hexa = parseInt(number, 2).toString(16).toUpperCase();
-}
-
-function valideare_ipv6(){
-
 }
