@@ -8,10 +8,12 @@ var first_adress = "", last_adress = "";
 
 function main() {
     maxLengthCheck2(prefix);
+    maxLengthCheck2(new_prefix);
     prefi = document.getElementById("prefix").value;
     if (validare_ipv6()) {
         process_adress();
     }
+    new_subprefix();
 }
 
 function process_adress() {
@@ -113,4 +115,12 @@ function validare_ipv6() {
         document.getElementById("valid_ipv6").style.backgroundColor = "red";
     }
     return rez;
+}
+
+function new_subprefix(){
+    let new_prefix_val = document.getElementById("new_prefix").value;
+    let rezultat = 0;
+    if(new_prefix_val>prefi)
+        rezultat = 2**(new_prefix_val - prefi);
+    document.getElementById("nw_prf").value = rezultat;
 }
