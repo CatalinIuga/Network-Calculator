@@ -9,7 +9,7 @@ Running locally:
   
 
 
-##RO
+## RO
 Descriere:
   Network Calculator este o pagină web ce permite diverse calcule asupra adreselor IPv4 și IPv6.
   
